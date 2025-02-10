@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Avançado de JavaScript</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 20px 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 600px;
+      transition: transform 0.3s ease;
+    }
+    .quiz-container:hover {
+      transform: scale(1.03);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .options li:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.2em;
+      display: none;
+    }
+    .button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz Avançado de JavaScript</h1>
+    <div class="question-container">
+      <div class="question" id="question">A pergunta aparecerá aqui</div>
+      <ul class="options" id="options"></ul>
+    </div>
+    <button class="button" id="next-button">Próxima Pergunta</button>
+    <div class="result" id="result">Seu resultado aparecerá aqui</div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "Qual é o resultado de '2' + 2 em JavaScript?",
+        options: ["22", "4", "NaN", "undefined"],
+        correct: 0
+      },
+      {
+        question: "Qual das seguintes opções não é um tipo primitivo em JavaScript?",
+        options: ["String", "Boolean", "Objeto", "Number"],
+        correct: 2
+      },
+      {
+        question: "O que 'this' se refere em uma função regular?",
+        options: ["O objeto global", "O objeto atual", "A própria função", "undefined"],
+        correct: 0
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const resultEl = document.getElementById('result');
+    const nextButton = document.getElementById('next-button');
+
+    function loadQuestion() {
+      const currentQuiz = quizData[currentQuestion];
+      questionEl.textContent = currentQuiz.question;
+      optionsEl.innerHTML = '';
+      currentQuiz.options.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option;
+        li.addEventListener('click', () => selectOption(index));
+        optionsEl.appendChild(li);
+      });
+    }
+
+    function selectOption(selectedIndex) {
+      const correctIndex = quizData[currentQuestion].correct;
+      if (selectedIndex === correctIndex) {
+        score++;
+        alert('Correto!');
+      } else {
+        alert(`Errado! A resposta correta é: ${quizData[currentQuestion].options[correctIndex]}`);
+      }
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      questionEl.style.display = 'none';
+      optionsEl.style.display = 'none';
+      nextButton.style.display = 'none';
+      resultEl.style.display = 'block';
+      resultEl.textContent = `Você acertou ${score} de ${quizData.length} perguntas!`;
+    }
+
+    nextButton.addEventListener('click', loadQuestion);
+    loadQuestion();
+  </script>
+</body>
+</html>
